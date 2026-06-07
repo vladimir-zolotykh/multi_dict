@@ -8,12 +8,13 @@ class TupleMeta(type):
     def __init__(cls, name, bases, clsdict):
         fields = clsdict.get("_fields", [])
         for k, name in enumerate(fields):
-            clsdict[name] = property(itemgetter(k))
+            setattr(cls, name, property(itemgetter(k)))
 
 
 class MyTuple(tuple, metaclass=TupleMeta):
     def __new__(cls, *args):
-        print(len(args))
+        if len(args) != (n := len(cls._fields)):
+            raise TypeError(f"<class {cls.__name__!r}>: expects {n} args")
         return super().__new__(cls, args)
 
 
@@ -21,6 +22,11 @@ class Employee(MyTuple):
     _fields = ["name", "position", "salary"]
 
 
+def as_csv(empl: Employee) -> str:
+    return ", ".join(f"{n}={getattr(empl, n)!r}" for n in empl._fields)
+
+
 if __name__ == "__main__":
     empl = Employee("Alice", "Software Engineer", 70000)
     print(empl)
+    print(as_csv(empl))
