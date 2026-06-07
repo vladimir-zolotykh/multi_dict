@@ -14,7 +14,7 @@ class TupleMeta(type):
 class MyTuple(tuple, metaclass=TupleMeta):
     def __new__(cls, *args):
         print(len(args))
-        return super().__new__(*args)
+        return super().__new__(cls, args)
 
 
 class Employee(MyTuple):
