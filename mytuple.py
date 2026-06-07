@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+"""
+>>> empl = Employee("Alice", "Software Engineer", 70000)
+>>> empl
+('Alice', 'Software Engineer', 70000)
+>>> as_csv(empl)
+"name='Alice', position='Software Engineer', salary=70000"
+>>> empl = Employee("Software Engineer", 70000)
+Traceback (most recent call last):
+...
+TypeError: <class 'Employee'>: expects 3 args
+"""
 from operator import itemgetter
 
 
@@ -27,6 +38,6 @@ def as_csv(empl: Employee) -> str:
 
 
 if __name__ == "__main__":
-    empl = Employee("Alice", "Software Engineer", 70000)
-    print(empl)
-    print(as_csv(empl))
+    import doctest
+
+    doctest.testmod()
