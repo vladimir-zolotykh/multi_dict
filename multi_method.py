@@ -5,7 +5,7 @@
 from typing import Callable, Any, MutableMapping
 from types import MethodType
 from functools import wraps
-from inspect import signature, _empty
+from inspect import signature, Signature, _empty
 
 
 class MultiMethod:
@@ -64,8 +64,8 @@ def stamp(func):
     @wraps(func)
     def wrapper(*args, **kwds):
         sig = signature(func)
-        # print(list(v.annotation for k, v in sig.parameters.items() if k != "self"))
-        print(f"{func.__name__} {sig}")
+        sig = Signature(p for name, p in sig.parameters.items() if name != "self")
+        print(f"{func.__name__} {sig} {args[1:]}")
         res = func(*args, **kwds)
         return res
 
@@ -73,14 +73,17 @@ def stamp(func):
 
 
 class Math(metaclass=MultiDispatch):
+    @stamp
     def add(self, x: int, y: int):
-        print(f"add-int-int({x}, {y})")
+        pass
 
+    @stamp
     def add(self, x: str, y: str):
-        print(f"add-str-str({x}, {y})")
+        pass
 
+    @stamp
     def add(self, x: float, y: float = 0.0):
-        print(f"add-float-float({x}, {y})")
+        pass
 
 
 if __name__ == "__main__":
